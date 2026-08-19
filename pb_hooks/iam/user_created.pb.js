@@ -39,6 +39,8 @@ const retry = async (fn, retryTime = 3) => {
 			await sleep(1000);
 		}
 	}
+
+	return null;
 };
 
 onRecordAfterCreateSuccess((e) => {
@@ -51,10 +53,9 @@ onRecordAfterCreateSuccess((e) => {
 	const retryTime = 3;
 
 	retry(async () => {
-		await publish(eventName, eventData);
+		const response = await publish(eventName, eventData);
+		console.log("Retry response: ", response);
 	}, retryTime);
-
-	console.log(response);
 
 	e.next();
 }, "users");
