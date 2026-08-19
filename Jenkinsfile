@@ -9,14 +9,23 @@ pipeline {
 
     stages {
         stage('Deploy') {
-            steps {
-                sh '''
-                    scp -r \
-                        pb_hooks \
-                        pb_migrations \
-                        ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
-                '''
-            }
+          steps {
+            sh '''
+                scp -r \
+                    pb_hooks \
+                    pb_migrations \
+                    ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+            '''
+          }
+        },
+
+        stage('Restart') {
+          steps {
+            sh '''
+              ssh ${DEPLOY_USER}@${DEPLOY_HOST} \
+                'sudo systemctl restart pocketbase && sudo systemctl is-active --quiet pocketbase'
+              '''
+          }
         }
     }
 }
