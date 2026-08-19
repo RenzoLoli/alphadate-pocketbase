@@ -1,8 +1,6 @@
-const PUBLISH_URL = "http://192.168.68.50:15672/api/exchanges/%2F//publish";
-
-const publish = async (event, payload) => {
+const publish = async (url, event, payload) => {
 	console.log(event, payload);
-	const response = await fetch(PUBLISH_URL, {
+	const response = await fetch(url, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -28,9 +26,9 @@ const publish = async (event, payload) => {
 	return response.json();
 };
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const retry = async (fn, retryTime = 3) => {
+export const retry = async (fn, retryTime = 3) => {
 	console.log("Starting...");
 	for (let i = 0; i < retryTime; i++) {
 		try {
@@ -45,18 +43,4 @@ const retry = async (fn, retryTime = 3) => {
 	return null;
 };
 
-onRecordAfterCreateSuccess(async (e) => {
-	const eventName = "User.Created";
-	const eventData = {
-		code: e.record.get("code"),
-		username: e.record.get("username"),
-		email: e.record.get("email"),
-	};
-	const retryTime = 3;
-
-	const response = await retry(() => publish(eventName, eventData), retryTime);
-
-	console.log(response);
-
-	e.next();
-}, "users");
+module.exports = { publish, sleep, retry };
