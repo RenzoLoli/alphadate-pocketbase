@@ -17,7 +17,7 @@ pipeline {
                     ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
             '''
           }
-        },
+        }
 
         stage('Restart') {
           steps {
