@@ -1,6 +1,8 @@
-const publish = async (url, event, payload) => {
+const publish = async (event, payload) => {
+	const PUBLISH_URL = "http://192.168.68.50:15672/api/exchanges/%2F//publish";
+
 	console.log(event, payload);
-	const response = await fetch(url, {
+	const response = await fetch(PUBLISH_URL, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
