@@ -5,9 +5,8 @@ pipeline {
         stage('Deploy') {
             steps {
               sh '''
-                rsync -av --delete \
-                  pb_hooks/ \
-                  root@192.168.68.55:/opt/pocketbase/pb_hooks/
+              scp -r pb_hooks/* \
+                root@192.168.68.55:/opt/pocketbase/pb_hooks/
               '''
             }
           }
